@@ -31,6 +31,7 @@ if ! zplug check --verbose; then
     fi
 fi
 
+
 zplug load
 export PATH="/usr/local/opt/python/libexec/bin:$PATH"
 export PATH="/usr/local/opt/php@7.1/bin:$PATH"
@@ -76,3 +77,4 @@ _comp_options=(
     NO_warncreateglobal
     )
 [ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fpath+=${ZDOTDIR:-~}/.zsh_functions
