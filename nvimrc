@@ -39,6 +39,7 @@ nnoremap <expr> <Leader>s (FugitiveHead() != '' ? ':GFiles<cr>' : ':Files<cr>')
 nnoremap <Leader>vf :tabe ~/.vimrc<CR>
 nnoremap <Leader>vs :source ~/.vimrc<CR>
 nnoremap <Leader>ff :Files<CR>
+nnoremap <Leader>/  :BLines<CR>
 nnoremap <Leader>bb :Buffers<CR>
 nnoremap <Leader>bk :bdelete<CR>
 nnoremap <Leader>f/ :Lines<CR>
@@ -111,13 +112,15 @@ tnoremap <C-l> <Right>
 " End Personal configs
 command! -nargs=0 Format :call CocAction('format')
 
-
 " more terminal stuff
-autocmd TermOpen * setl nocursorline norelativenumber nonumber
-autocmd TermOpen * tnoremap <Esc> <C-\><C-n>
+if has("nvim")
+  autocmd TermOpen * setl nocursorline norelativenumber nonumber
+  autocmd TermOpen * tnoremap <Esc> <c-\><c-n>
+  autocmd FileType fzf tunmap <Esc>
+  autocmd FileType php setl shiftwidth=4 expandtab
+endif
 " end more terminal stuff
 
-au FileType fzf tunmap <Esc>
 call plug#begin('~/.vim/plugged')
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'whatyouhide/vim-gotham'
@@ -131,7 +134,6 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'scrooloose/nerdtree'
-Plug 'jiangmiao/auto-pairs'
 Plug 'diepm/vim-rest-console'
 Plug 'neoclide/coc.nvim', {'tag': '*', 'do': './install.sh'}
 Plug 'HerringtonDarkholme/yats'
@@ -150,6 +152,16 @@ let g:ale_completion_enabled = 1
 let g:ale_completion_delay = 500
 " END ALE Configuration
 
+let g:lightline = {
+      \   'colorscheme': 'wombat',
+      \   'active': {
+      \     'left': [ ['mode', 'paste'],
+      \               [ 'gitbranch', 'readonly', 'filename', 'modified' ] ]
+      \   },
+      \   'component_function': {
+      \     'gitbranch': 'fugitive#head'
+      \   }
+      \ }
 syntax on
 colorscheme darcula
 if has("gui_running")
