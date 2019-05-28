@@ -117,7 +117,7 @@ if has("nvim")
   autocmd TermOpen * setl nocursorline norelativenumber nonumber
   autocmd TermOpen * tnoremap <Esc> <c-\><c-n>
   autocmd FileType fzf tunmap <Esc>
-  autocmd FileType php setl shiftwidth=4 expandtab
+  autocmd FileType php setl noexpandtab 
 endif
 " end more terminal stuff
 
@@ -171,3 +171,5 @@ endif
 hi SpecialKey ctermfg=237 guifg=#3a3a3a
 hi NonText ctermfg=237 guifg=#3a3a3a
 set termguicolors
+uicolors
+
