@@ -44,37 +44,8 @@ export PATH="$HOME/pear/bin:$PATH"
 export PATH="$(npm bin):$PATH"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-_comp_options=(
-       bareglobqual
-       extendedglob
-       glob
-       multibyte
-       multifuncdef
-       nullglob
-       rcexpandparam
-       unset
-    NO_allexport
-    NO_aliases
-    NO_cshnullglob
-    NO_cshjunkiequotes
-    NO_errexit
-    NO_errreturn
-    NO_globassign
-    NO_globsubst
-    NO_histsubstpattern
-    NO_ignorebraces
-    NO_ignoreclosebraces
-    NO_kshglob
-    NO_ksharrays
-    NO_kshtypeset
-    NO_markdirs
-    NO_octalzeroes
-    NO_posixbuiltins
-    NO_posixidentifiers
-    NO_shwordsplit
-    NO_shglob
-    NO_warnnestedvar
-    NO_warncreateglobal
-    )
-[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+_comp_options=(${_comp_options/NO_warnnestedvar/})
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+
+bindkey -s '^o' 'ranger\n'
+bindkey '^e' edit-command-line
