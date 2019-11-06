@@ -21,6 +21,7 @@ zplug "modules/utility", from:prezto
 zplug "modules/history-substring-search", from:prezto
 zplug "modules/autosuggestions", from:prezto
 zplug "modules/completion", from:prezto
+zplug "greymd/docker-zsh-completion"
 
 if ! zplug check --verbose; then
     printf "Install? [y/N]: "

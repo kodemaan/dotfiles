@@ -14,10 +14,10 @@ set expandtab
 set number
 set nobackup
 set foldenable
+set incsearch
 set foldlevelstart=10
 set foldnestmax=10
 set foldmethod=syntax
-" }}}
 set noswapfile
 set nowritebackup
 set ignorecase
@@ -29,7 +29,6 @@ set undofile
 set copyindent
 set smartcase
 set mouse=a
-set clipboard=unnamedplus
 set colorcolumn=120
 set nocursorline
 set hidden
@@ -45,6 +44,14 @@ set shortmess+=c
 set tags=tags
 let &listchars = "tab:~>,space:•,extends:>,precedes:<,eol:\u00ac,trail:\u00b7"
 let mapleader = " "
+if has("clipboard")
+  set clipboard=unnamed " copy to the system clipboard
+
+  if has("unnamedplus")" " X11 support
+    set clipboard+=unnamedplus
+  endif
+endif
+""
 " If you hit enter on a modified buffer it saves it else it just hits enter
 nnoremap <silent><expr> <CR> &buftype is# '' ? ":update\<CR>" : "\<CR>"
 " nnoremap <Leader>s :GFiles<CR>
@@ -60,7 +67,6 @@ nnoremap <Leader>fp :Ag<CR>
 nnoremap <Leader>ne :NERDTreeToggle<CR>
 nnoremap <Leader>nf :NERDTreeFocus<CR>
 nnoremap <Leader>nt :tabe<CR>
-nnoremap <Leader>tt :tabe term:///bin/zsh<CR>i
 nnoremap <Leader><Enter> :HTTPClientDoRequest<CR>
 " Git mappings
 nnoremap <Leader>gs :Gstatus<CR>
@@ -73,6 +79,7 @@ nnoremap <space>gd :Gdiff<CR>
 nnoremap <space>ge :Gedit<CR>
 nnoremap <space>gr :Gread<CR>
 nnoremap <space>gl :silent! Glog<CR>:bot copen<CR>
+nnoremap <space>gu 500j500k
 nnoremap <space>gp :Ggrep<Space>
 nnoremap <space>gm :Gmove<Space>
 nnoremap <space>gb :Git branch<Space>
@@ -93,15 +100,6 @@ nmap <Leader>yl :!npx eslint --ext=js,jsx,ts,tsx %<cr>
 nnoremap <Leader>q :q<CR>
 set autoread
 
-" vimwiki configs
-let g:vimwiki_list = [{'path': '~/mynotes/',
-  \ 'syntax': 'markdown', 'ext': '.md'}]
-let g:vimwiki_global_ext = 0
-
-" markdown stuff
-let vim_markdown_preview_toggle=1
-" Tab completion coc.nvim
-
 function! s:show_documentation()
   if &filetype == 'vim'
     execute 'h '.expand('<cword>')
@@ -114,17 +112,7 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
-function! ViewHtmlText(url)
-  if !empty(a:url)
-    new
-    setlocal buftype=nofile bufhidden=hide noswapfile
-    execute 'r !elinks ' . a:url . ' -dump -dump-width ' . winwidth(0)
-    1d
-  endif
-endfunction
 
-vnoremap <Leader>h y:call ViewHtmlText(@@)<CR>
-let g:coc_snippet_next = '<tab>'
 " End Tab Completion coc.nvim
 nnoremap <Leader>ee <Plug>(coc-diagnostic-info)<CR>
 " Window commands
@@ -168,36 +156,22 @@ Plug 'tpope/vim-fugitive'
 Plug 'blueshirts/darcula'
 Plug 'yaroot/vissort'
 Plug 'easymotion/vim-easymotion'
-Plug 'vimwiki/vimwiki'
-Plug 'christoomey/vim-tmux-navigator'
-Plug 'gruvbox-community/gruvbox'
 Plug 'lifepillar/vim-solarized8'
 Plug 'dikiaap/minimalist'
 Plug 'itchyny/lightline.vim'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
-Plug 'francoiscabrol/ranger.vim'
+if !has("gui_running")
+  Plug 'francoiscabrol/ranger.vim'
+endif
 Plug 'rbgrouleff/bclose.vim'
-Plug 'diepm/vim-rest-console'
-Plug 'HerringtonDarkholme/yats'
 Plug 'airblade/vim-rooter'
 Plug 'airblade/vim-gitgutter'
 call plug#end()
 
 command -bar -bang -nargs=* Gci :Gcommit<bang> -v <args>
-" COC.nvim config start
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~ '\s'
-endfunction
 
-inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-n>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
 " COC.nvim end
 
 let g:lightline = {
@@ -205,6 +179,41 @@ let g:lightline = {
 \   'active': {
 \     'left': [ ['mode', 'paste'],
 \               [ 'gitbranch', 'cocstatus', 'readonly', 'filename', 'modified' ] ]
+\   },
+\   'component_function': {
+\     'gitbranch': 'fugitive#head',
+\     'cocstatus': 'coc#status',
+\   }
+\ }
+
+let g:vrc_curl_opts = {
+  \ '-s': '',
+  \ '-i': '',
+\ }
+
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+let g:coc_snippet_next = '<tab>'
+let g:header_field_author = 'Steven Smith'
+let g:header_field_author_email = 'stsmith@nabancard.com'
+syntax on
+colorscheme monokai
+if has("gui_running")
+  set macligatures
+  set guifont="Fira Code:h12"
+endif
+hi SpecialKey ctermfg=237 guifg=#3a3a3a
+hi NonText ctermfg=237 guifg=#3a3a3a
+ ] ]
 \   },
 \   'component_function': {
 \     'gitbranch': 'fugitive#head',
