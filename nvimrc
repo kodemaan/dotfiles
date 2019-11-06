@@ -213,28 +213,3 @@ if has("gui_running")
 endif
 hi SpecialKey ctermfg=237 guifg=#3a3a3a
 hi NonText ctermfg=237 guifg=#3a3a3a
- ] ]
-\   },
-\   'component_function': {
-\     'gitbranch': 'fugitive#head',
-\     'cocstatus': 'coc#status',
-\   }
-\ }
-
-let g:vrc_curl_opts = {
-  \ '-s': '',
-  \ '-i': '',
-\ }
-
-let g:header_field_author = 'Steven Smith'
-let g:header_field_author_email = 'stsmith@nabancard.com'
-syntax on
-colorscheme monokai
-if has("gui_running")
-  set macligatures
-  set guifont="Fira Code:h12"
-endif
-hi SpecialKey ctermfg=237 guifg=#3a3a3a
-hi NonText ctermfg=237 guifg=#3a3a3a
-set termguicolors
-
