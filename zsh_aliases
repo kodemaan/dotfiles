@@ -29,6 +29,12 @@ alias yc='python ~/scripts/yarncoverage.py'
 alias sqitch='~/scripts/sqitch'
 alias lsr='ls -lart'
 alias ctags="`brew --prefix`/bin/ctags"
+# Switching back to nvim again
+alias vim='nvim'
+# tmuxinator aliases
+alias tm='tmuxinator'
+alias tme='tmuxinator edit'
+alias tms='tmuxinator start'
 fbr() {
   git fetch
   local branches branch

@@ -127,7 +127,9 @@ nnoremap <Leader>w/ :vs<CR>
 " End window commands
 nnoremap <Leader>c :Commands<CR>
 nnoremap \ :nohlsearch<CR>
-nnoremap <Leader>f :Ranger<CR>i
+if !has("gui_running")
+  nnoremap <Leader>f :Ranger<CR>i
+endif
 
 " Buffer commands
 nnoremap <Leader>bl :bnext<CR>
@@ -151,20 +153,15 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'dracula/vim', { 'as': 'dracula' }
 Plug 'whatyouhide/vim-gotham'
-Plug 'dikiaap/minimalist'
 Plug 'tpope/vim-fugitive'
 Plug 'blueshirts/darcula'
-Plug 'yaroot/vissort'
 Plug 'easymotion/vim-easymotion'
 Plug 'lifepillar/vim-solarized8'
-Plug 'dikiaap/minimalist'
 Plug 'itchyny/lightline.vim'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-if !has("gui_running")
-  Plug 'francoiscabrol/ranger.vim'
-endif
+Plug 'francoiscabrol/ranger.vim'
 Plug 'rbgrouleff/bclose.vim'
 Plug 'airblade/vim-rooter'
 Plug 'airblade/vim-gitgutter'
