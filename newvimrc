@@ -1,0 +1,159 @@
+
+"
+set tabstop=2
+set shiftwidth=2
+set expandtab
+set number
+set nobackup
+set noswapfile
+set nowritebackup
+set ignorecase
+set hlsearch
+set smartindent
+set undodir=~/.vim/.cache/undo_dir/
+set wrap
+set linebreak
+set nolist
+set incsearch
+set undofile
+set copyindent
+set smartcase
+set mouse=a
+set colorcolumn=120
+set nocursorline
+set hidden
+set signcolumn=auto
+set wildmenu
+set lazyredraw
+set list
+set relativenumber
+set timeoutlen=500
+set cmdheight=2
+set updatetime=300
+set shortmess+=c
+set tags=tags
+let &listchars = "tab:~>,space:•,extends:>,precedes:<,eol:\u00ac,trail:\u00b7"
+let mapleader = " "
+" Use clipboard for yanking and pasting from
+if has("clipboard")
+  set clipboard=unnamed " copy to the system clipboard
+
+let b:coc_root_patterns = ['.git', '.env']
+  if has("unnamedplus")" " X11 support
+    set clipboard+=unnamedplus
+  endif
+endif
+" ================ MAPPINGS =====================
+" vim leader
+nnoremap <Space> <Nop>
+let mapleader = "\<Space>"
+nnoremap <silent> <leader> :call leaderMapper#start() "<Space>"<CR>
+vnoremap <silent> <leader> :call leaderMapper#start() "<Space>"<CR>
+nnoremap <leader>dl :r ~/mynotes/diary/template.md<CR>
+nnoremap <leader>wk :wincmd k<CR>
+nnoremap <leader>wj :wincmd j<CR>
+nnoremap <leader>wh :wincmd h<CR>
+nnoremap <leader>wl :wincmd l<CR>
+nnoremap <leader>w- :split<CR>
+nnoremap <leader>w\ :vsplit<CR>
+
+" vim fugitive
+let gitGutter = {'name': 'Gutter',
+             \'s': [":GitGutterStageHunk", "Stage Hunk"],
+             \'t': [":GitGutterToggle", "Toggle Gutter"],
+             \}
+let gitMenu = {'name': "Git",
+             \'s': [":Gstatus", "Status"],
+             \'p': [":Gpush -u", "Push changes"],
+             \'c': [":Gcommit", "Commit Changes"],
+             \'g': [gitGutter, "Toggle Gutter"],
+             \}
+let vimMenu = {'name': "Vimrc",
+             \'s': [":so $MYVIMRC", "Source"],
+             \'f': [":tabe $MYVIMRC", "Open"],
+             \}
+let cocNvim = {'name': "Coc.nvim",
+             \'c': [":Commands", "Command"],
+             \'f': [":CocCommand eslint.executeAutofix", "autofix all"],
+             \'n': [":CocNext", "Next error"],
+             \'d': [":CocList diagnostics", "Diagnostics"],
+             \}
+let vimWiki = {'name': 'Vimwiki',
+             \'w': [":VimwikiIndex",           "Main Index"],
+             \'s': [":VimwikiUISelect",        "Select wiki"],
+             \'i': [":VimwikiDiaryIndex",      "Diary"]
+             \}
+let g:leaderMenu = {"name":  "",
+             \'f': [":Ag", "files by string"],
+             \'s': [":GFiles", "files by name"],
+             \'g': [gitMenu,                        "Git"],
+             \'c': [cocNvim,                        "Coc.nvim"],
+             \'v': [vimMenu,                        "Edit vimrc"],
+             \'r': [":Ranger",                      "Ranger file manager"],
+             \'l': [":Buffer",                      "List opened buffers"],
+             \'/': [":BLines",                       "Search lines in open buffer"],
+             \'q': [":q",                           "Quit buffer"],
+             \'w': [vimWiki,                        "Vimwiki"]
+             \}
+let g:ranger_map_keys = 0
+" nnoremap <expr> <Leader>s (FugitiveHead() != '' ? ':GFiles<cr>' : ':Files<cr>')
+" nnoremap <Leader>gs :Gstatus<CR>
+
+" Git Gutter
+" nnoremap <Leader>gt :GitGutterToggle<CR>
+" nnoremap <Leader>gn <Plug>(GitGutterNextHunk)
+" nnoremap <Leader>gp <Plug>(GitGutterPreviousHunk)
+
+" Fzf
+" nnoremap <Leader>fp :Ag<CR>
+" nnoremap <Leader>l :Buffers<CR>
+" nnoremap <Leader>/ :Lines<CR>
+
+" Misc
+nnoremap <silent><expr> <CR> &buftype is# '' ? ":update\<CR>" : "\<CR>"
+nnoremap <c-s> :w<CR>
+imap <c-s> <Esc><c-s>a
+nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+" nnoremap <Leader>vs :source ~/.config/nvim/init.vim<CR>
+" nnoremap <Leader>q :q<CR>
+
+" coc.nvim
+" nnoremap <Leader>cf :CocCommand eslint.executeAutofix<CR>
+nnoremap <Leader>md :MarkdownPreview
+
+" ================ END ==========================
+
+call plug#begin()
+Plug 'easymotion/vim-easymotion'
+Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'itchyny/lightline.vim'
+Plug 'tpope/vim-fugitive'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'preservim/nerdcommenter'
+Plug 'airblade/vim-gitgutter'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'damofthemoon/vim-leader-mapper'
+Plug 'vimwiki/vimwiki', {'branch': 'dev'}
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'reedes/vim-thematic'
+Plug 'yorickpeterse/happy_hacking.vim'
+Plug 'mattn/calendar-vim'
+Plug 'tpope/vim-unimpaired'
+call plug#end()
+
+let g:vimwiki_list = [{'path': '~/mynotes/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:vimwiki_ext2syntax = {'.md': 'markdown'}
+let g:vimwiki_markdown_link_ext=1
+
+let g:lightline = {
+  \ 'colorscheme': 'jellybeans',
+  \ 'active': {
+  \  'left': [ [ 'mode', 'paste' ],
+  \            [ 'gitbranch', 'readonly', 'filename', 'modified'] ]
+  \ },
+  \ 'component_function': {
+  \  'gitbranch': 'FugitiveHead'
+  \ }
+  \}
+colorscheme happy_hacking

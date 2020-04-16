@@ -9,6 +9,7 @@ zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
 
 zplug "modules/command-not-found", from:oh-my-zsh
 zplug "modules/syntax-highlighting", from:oh-my-zsh
+zplug "plugins/kubectl", from:oh-my-zsh
 zplug "modules/environment", from:prezto
 zplug "modules/docker", from:prezto
 zplug "modules/history", from:prezto
@@ -34,7 +35,6 @@ fi
 
 
 zplug load
-export PATH="/usr/local/opt/python/libexec/bin:$PATH"
 export PATH="/usr/local/opt/php@7.1/bin:$PATH"
 export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
 export PATH="/usr/local/opt/php@7.0/bin:$PATH"
@@ -47,6 +47,17 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 _comp_options=(${_comp_options/NO_warnnestedvar/})
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE='20'
 
 bindkey -s '^o' 'ranger\n'
 bindkey '^e' edit-command-line
+
+# tabtab source for serverless package
+# uninstall by removing these lines or running `tabtab uninstall serverless`
+[[ -f /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/serverless.zsh ]] && . /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/serverless.zsh
+# tabtab source for sls package
+# uninstall by removing these lines or running `tabtab uninstall sls`
+[[ -f /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh ]] && . /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/sls.zsh
+# tabtab source for slss package
+# uninstall by removing these lines or running `tabtab uninstall slss`
+[[ -f /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/slss.zsh ]] && . /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/slss.zsh

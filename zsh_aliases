@@ -18,23 +18,28 @@ alias composer73='docker run -it -v $PWD:/app:cached -w /app prooph/composer:7.3
 alias composer72='docker run -it -v $PWD:/app:cached -w /app prooph/composer:7.2'
 alias composer71='docker run -it -v $PWD:/app:cached -w /app prooph/composer:7.1'
 alias composer70='docker run -it -v $PWD:/app:cached -w /app prooph/composer:7.0'
+alias psound='~/scripts/playsound.sh'
 alias gpod='git pull origin develop'
 alias magap='make fix;ga -p'
-alias portainer='docker run -d -p 9000:9000 --name=portainer -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer'
+alias portainer='docker run -d -p 9000:9000 --rm --name=portainer -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer'
 alias rmf='rm -rf'
 alias phpcs='docker run --rm -v $PWD:/code:ro wernight/phpcs phpcs'
 alias phpcbf='docker run --rm --user $(id -u):$(id -g)  --volume $(pwd):/project  herloct/phpcbf'
-alias yj='python ~/scripts/yarnjest.py'
-alias yc='python ~/scripts/yarncoverage.py'
 alias sqitch='~/scripts/sqitch'
 alias lsr='ls -lart'
 alias ctags="`brew --prefix`/bin/ctags"
+alias ...="cd ../../"
+alias ....="cd ../../../"
+alias .....="cd ../../../../"
 # Switching back to nvim again
 alias vim='nvim'
 # tmuxinator aliases
 alias tm='tmuxinator'
 alias tme='tmuxinator edit'
 alias tms='tmuxinator start'
+alias y='yarn'
+alias yc='CD=coverage node ~/scripts/yarnjest.js'
+alias yj='CD=jest node ~/scripts/yarnjest.js'
 fbr() {
   git fetch
   local branches branch
@@ -115,4 +120,7 @@ bcp() {
     for prog in $(echo $uninst);
     do; brew uninstall $prog; done;
   fi
+}
+fza() {
+  alias | fzf | sed s/=.*//
 }
