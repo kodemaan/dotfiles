@@ -38,6 +38,7 @@ let mapleader = " "
 if has("clipboard")
   set clipboard=unnamed " copy to the system clipboard
 
+autocmd BufEnter * :syntax sync fromstart
 let b:coc_root_patterns = ['.git', '.env']
   if has("unnamedplus")" " X11 support
     set clipboard+=unnamedplus
@@ -56,7 +57,10 @@ nnoremap <leader>wh :wincmd h<CR>
 nnoremap <leader>wl :wincmd l<CR>
 nnoremap <leader>w- :split<CR>
 nnoremap <leader>w\ :vsplit<CR>
-
+nnoremap <leader>q :q<CR>
+nnoremap <leader>sc :tabe ~/code/dotfiles/shortcuts.md<CR>
+nnoremap gdh :diffget //2<CR>
+nnoremap gdl :diffget //3<CR>
 " vim fugitive
 let gitGutter = {'name': 'Gutter',
              \'s': [":GitGutterStageHunk", "Stage Hunk"],
@@ -65,6 +69,7 @@ let gitGutter = {'name': 'Gutter',
 let gitMenu = {'name': "Git",
              \'s': [":Gstatus", "Status"],
              \'p': [":Gpush -u", "Push changes"],
+             \'d': [":Gvdiffsplit!", "Diff Split"],
              \'c': [":Gcommit", "Commit Changes"],
              \'g': [gitGutter, "Toggle Gutter"],
              \}
@@ -92,7 +97,6 @@ let g:leaderMenu = {"name":  "",
              \'r': [":Ranger",                      "Ranger file manager"],
              \'l': [":Buffer",                      "List opened buffers"],
              \'/': [":BLines",                       "Search lines in open buffer"],
-             \'q': [":q",                           "Quit buffer"],
              \'w': [vimWiki,                        "Vimwiki"]
              \}
 let g:ranger_map_keys = 0
@@ -110,12 +114,18 @@ let g:ranger_map_keys = 0
 " nnoremap <Leader>/ :Lines<CR>
 
 " Misc
-nnoremap <silent><expr> <CR> &buftype is# '' ? ":update\<CR>" : "\<CR>"
 nnoremap <c-s> :w<CR>
 imap <c-s> <Esc><c-s>a
 nnoremap <Leader>tt :VimwikiToggleListItem<CR>
+let g:vrc_output_buffer_name = '__VRC_OUTPUT.json'
+let g:vrc_trigger = '<CR>'
+" let g:vrc_auto_format_response_patterns = {
+"   \ 'json': 'jq'
+"   \}
+" let g:vrc_show_command = 1
+" let g:vrc_debug = 1
+let g:vrc_response_default_content_type = 'application/json'
 " nnoremap <Leader>vs :source ~/.config/nvim/init.vim<CR>
-" nnoremap <Leader>q :q<CR>
 
 " coc.nvim
 " nnoremap <Leader>cf :CocCommand eslint.executeAutofix<CR>
@@ -127,6 +137,7 @@ call plug#begin()
 Plug 'easymotion/vim-easymotion'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'morhetz/gruvbox'
 Plug 'itchyny/lightline.vim'
 Plug 'tpope/vim-fugitive'
 Plug 'francoiscabrol/ranger.vim'
@@ -140,6 +151,8 @@ Plug 'reedes/vim-thematic'
 Plug 'yorickpeterse/happy_hacking.vim'
 Plug 'mattn/calendar-vim'
 Plug 'tpope/vim-unimpaired'
+Plug 'diepm/vim-rest-console'
+Plug 'pangloss/vim-javascript'
 call plug#end()
 
 let g:vimwiki_list = [{'path': '~/mynotes/', 'syntax': 'markdown', 'ext': '.md'}]
@@ -156,4 +169,4 @@ let g:lightline = {
   \  'gitbranch': 'FugitiveHead'
   \ }
   \}
-colorscheme happy_hacking
+colorscheme gruvbox

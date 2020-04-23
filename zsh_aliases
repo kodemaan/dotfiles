@@ -40,6 +40,13 @@ alias tms='tmuxinator start'
 alias y='yarn'
 alias yc='CD=coverage node ~/scripts/yarnjest.js'
 alias yj='CD=jest node ~/scripts/yarnjest.js'
+agr () {
+  # find and replace
+  regex=s/${1}/${2}/g;
+  ag $1 -l | xargs sed -i.agr_backup $regex;
+  # delete backups
+  ag -G .agr_backup -l | xargs rm
+}
 fbr() {
   git fetch
   local branches branch
