@@ -5,7 +5,6 @@ source "${HOME}/.zplug/init.zsh"
 zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "tarruda/zsh-autosuggestions"
 zplug "plugins/git-extras", from:oh-my-zsh
-zplug "bhilburn/powerlevel9k", use:powerlevel9k.zsh-theme
 
 zplug "modules/command-not-found", from:oh-my-zsh
 zplug "modules/syntax-highlighting", from:oh-my-zsh
@@ -18,7 +17,6 @@ zplug "modules/git", from:prezto
 zplug "modules/directory", from:prezto
 zplug "modules/syntax-highlighting", from:prezto
 zplug "modules/spectrum", from:prezto
-zplug "modules/utility", from:prezto
 zplug "modules/history-substring-search", from:prezto
 zplug "modules/autosuggestions", from:prezto
 zplug "modules/completion", from:prezto
@@ -61,3 +59,6 @@ bindkey '^e' edit-command-line
 # tabtab source for slss package
 # uninstall by removing these lines or running `tabtab uninstall slss`
 [[ -f /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/slss.zsh ]] && . /Users/stsmith/.config/yarn/global/node_modules/tabtab/.completions/slss.zsh
+
+# Set Spaceship ZSH as a prompt
+eval "$(starship init zsh)"

@@ -2,7 +2,7 @@ alias dc='docker-compose'
 alias gap='git add -p'
 alias ga='git add'
 alias gd='git diff'
-alias gst="vim '+Gedit :' ."
+alias gst="vim '+Gstatus'"
 alias gF='git-flow'
 alias gff='git-flow feature'
 alias gffs='git-flow feature start'
@@ -26,13 +26,17 @@ alias rmf='rm -rf'
 alias phpcs='docker run --rm -v $PWD:/code:ro wernight/phpcs phpcs'
 alias phpcbf='docker run --rm --user $(id -u):$(id -g)  --volume $(pwd):/project  herloct/phpcbf'
 alias sqitch='~/scripts/sqitch'
-alias lsr='ls -lart'
+alias l='colorls --group-directories-first --almost-all --gs'
+alias ls='colorls --group-directories-first -1 --gs'
+alias ll='colorls --group-directories-first --almost-all --long --gs'
+alias lr='ll -lart'
 alias ctags="`brew --prefix`/bin/ctags"
 alias ...="cd ../../"
 alias ....="cd ../../../"
 alias .....="cd ../../../../"
 # Switching back to nvim again
 alias vim='nvim'
+alias v='nvim'
 # tmuxinator aliases
 alias tm='tmuxinator'
 alias tme='tmuxinator edit'
@@ -40,6 +44,12 @@ alias tms='tmuxinator start'
 alias y='yarn'
 alias yc='CD=coverage node ~/scripts/yarnjest.js'
 alias yj='CD=jest node ~/scripts/yarnjest.js'
+function current_branch() {
+  ref=$(git symbolic-ref HEAD 2> /dev/null) || return
+  echo ${ref#refs/heads/}
+}
+alias ggpush='git push origin $(current_branch)'
+alias ggpull='git pull origin $(current_branch)'
 agr () {
   # find and replace
   regex=s/${1}/${2}/g;
@@ -54,7 +64,7 @@ fbr() {
   branch=$(echo "$branches" | fzf +s +m -e) &&
   git checkout $(echo "$branch" | sed "s:.* remotes/origin/::" | sed "s:.* ::")
 }
-fco_preview() {
+fco() {
   local tags branches target
   tags=$(
 git tag | awk '{print "\x1b[31;1mtag\x1b[m\t" $1}') || return

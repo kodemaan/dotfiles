@@ -28,29 +28,34 @@ set lazyredraw
 set list
 set relativenumber
 set timeoutlen=500
-set cmdheight=2
+set cmdheight=1
 set updatetime=300
 set shortmess+=c
 set tags=tags
 let &listchars = "tab:~>,space:•,extends:>,precedes:<,eol:\u00ac,trail:\u00b7"
 let mapleader = " "
 " Use clipboard for yanking and pasting from
+let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+set background=dark
+set t_Co=256
 if has("clipboard")
   set clipboard=unnamed " copy to the system clipboard
 
-autocmd BufEnter * :syntax sync fromstart
+au! VimEnter COMMIT_EDITMSG exec 'norm gg' | startinsert!
 let b:coc_root_patterns = ['.git', '.env']
   if has("unnamedplus")" " X11 support
     set clipboard+=unnamedplus
   endif
 endif
 " ================ MAPPINGS =====================
-" vim leader
+command Bd :up | %bd | e#
 nnoremap <Space> <Nop>
 let mapleader = "\<Space>"
 nnoremap <silent> <leader> :call leaderMapper#start() "<Space>"<CR>
 vnoremap <silent> <leader> :call leaderMapper#start() "<Space>"<CR>
-nnoremap <leader>dl :r ~/mynotes/diary/template.md<CR>
+nnoremap <leader>ht :HardTimeToggle<CR>
+nnoremap <leader>dl :r ~/diary/diary/template.md<CR>
 nnoremap <leader>wk :wincmd k<CR>
 nnoremap <leader>wj :wincmd j<CR>
 nnoremap <leader>wh :wincmd h<CR>
@@ -58,9 +63,27 @@ nnoremap <leader>wl :wincmd l<CR>
 nnoremap <leader>w- :split<CR>
 nnoremap <leader>w\ :vsplit<CR>
 nnoremap <leader>q :q<CR>
-nnoremap <leader>sc :tabe ~/code/dotfiles/shortcuts.md<CR>
+" H moves to first nonblank character
+nnoremap H ^
+vnoremap H ^
+" L moves to last nonblank character
+nnoremap L g_
+vnoremap L g_
+" J moves down 5 lines 
+nnoremap J 5j
+vnoremap J 5j
+" K moves up 5 lines 
+nnoremap K 5k
+vnoremap K 5k
+" Get back J mapping
+nnoremap <leader>j J
+nnoremap <leader>K K
+vnoremap <leader>j J
+vnoremap <leader>K K
 nnoremap gdh :diffget //2<CR>
 nnoremap gdl :diffget //3<CR>
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
+
 " vim fugitive
 let gitGutter = {'name': 'Gutter',
              \'s': [":GitGutterStageHunk", "Stage Hunk"],
@@ -68,7 +91,7 @@ let gitGutter = {'name': 'Gutter',
              \}
 let gitMenu = {'name': "Git",
              \'s': [":Gstatus", "Status"],
-             \'p': [":Gpush -u", "Push changes"],
+             \'p': [":Git pushd", "Push changes"],
              \'d': [":Gvdiffsplit!", "Diff Split"],
              \'c': [":Gcommit", "Commit Changes"],
              \'g': [gitGutter, "Toggle Gutter"],
@@ -79,6 +102,7 @@ let vimMenu = {'name': "Vimrc",
              \}
 let cocNvim = {'name': "Coc.nvim",
              \'c': [":Commands", "Command"],
+             \'a': [":CocAction", "Action for fix"],
              \'f': [":CocCommand eslint.executeAutofix", "autofix all"],
              \'n': [":CocNext", "Next error"],
              \'d': [":CocList diagnostics", "Diagnostics"],
@@ -146,21 +170,47 @@ Plug 'airblade/vim-gitgutter'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'damofthemoon/vim-leader-mapper'
 Plug 'vimwiki/vimwiki', {'branch': 'dev'}
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install'  }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 Plug 'reedes/vim-thematic'
 Plug 'yorickpeterse/happy_hacking.vim'
 Plug 'mattn/calendar-vim'
 Plug 'tpope/vim-unimpaired'
 Plug 'diepm/vim-rest-console'
 Plug 'pangloss/vim-javascript'
+Plug 'junegunn/goyo.vim'
+Plug 'chuling/vim-equinusocio-material'
+Plug 'leafgarland/typescript-vim'
+Plug 'peitalin/vim-jsx-typescript'
+Plug 'nelsyeung/twig.vim'
+Plug 'takac/vim-hardtime'
+Plug 'wellle/targets.vim'
+Plug 'justinmk/vim-sneak'
 call plug#end()
 
-let g:vimwiki_list = [{'path': '~/mynotes/', 'syntax': 'markdown', 'ext': '.md'}]
+let g:goyo_width = 120
+let g:goyo_linenr = 1
+let g:hardtime_default_on = 0
+let g:hardtime_maxcount = 2
+let g:hardtime_allow_different_key = 1
+let g:vimwiki_list = [
+  \{
+  \  'path': '~/diary',
+  \  'syntax': 'markdown',
+  \  'ext': '.md'
+  \},
+  \{
+  \   'path': '~/mynotes/',
+  \   'syntax': 'markdown',
+  \   'ext': '.md'
+  \}
+\] 
 let g:vimwiki_ext2syntax = {'.md': 'markdown'}
 let g:vimwiki_markdown_link_ext=1
 
+nnoremap <Leader>wb :set bt= <bar> :w! /tmp/temp.html <bar> :exe ':silent !open -a /Applications/Firefox.app /tmp/temp.html'<CR>
+
 let g:lightline = {
-  \ 'colorscheme': 'jellybeans',
+  \ 'colorscheme': 'equinusocio_material',
   \ 'active': {
   \  'left': [ [ 'mode', 'paste' ],
   \            [ 'gitbranch', 'readonly', 'filename', 'modified'] ]
@@ -169,4 +219,11 @@ let g:lightline = {
   \  'gitbranch': 'FugitiveHead'
   \ }
   \}
+set termguicolors
+let g:gruvbox_contrast_dark='hard'
+highlight Normal ctermbg=none
+highlight NonText ctermbg=none
+au ColorScheme * hi Normal ctermbg=none guibg=none
+au ColorScheme myspecialcolors hi Normal ctermbg=red guibg=red
 colorscheme gruvbox
+let g:sneak#label = 1
