@@ -33,16 +33,12 @@ fi
 
 
 zplug load
-export PATH="/usr/local/opt/php@7.1/bin:$PATH"
-export PATH="/usr/local/opt/php@7.1/sbin:$PATH"
-export PATH="/usr/local/opt/php@7.0/bin:$PATH"
-export PATH="/usr/local/opt/php@7.0/sbin:$PATH"
+export PATH="/usr/local/opt/php@7.4/bin:$PATH"
+export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 export PATH="$HOME/pear/bin:$PATH"
 export PATH="$(npm bin):$PATH"
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 _comp_options=(${_comp_options/NO_warnnestedvar/})
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE='20'
@@ -62,3 +58,5 @@ bindkey '^e' edit-command-line
 
 # Set Spaceship ZSH as a prompt
 eval "$(starship init zsh)"
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm

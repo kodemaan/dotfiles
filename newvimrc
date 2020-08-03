@@ -1,5 +1,3 @@
-
-"
 set tabstop=2
 set shiftwidth=2
 set expandtab
@@ -27,21 +25,26 @@ set wildmenu
 set lazyredraw
 set list
 set relativenumber
-set timeoutlen=500
+set timeoutlen=400
 set cmdheight=1
+set updatetime=300
 set updatetime=300
 set shortmess+=c
 set tags=tags
-let &listchars = "tab:~>,space:•,extends:>,precedes:<,eol:\u00ac,trail:\u00b7"
-let mapleader = " "
+let &listchars = "tab:~>,space:·,extends:>,precedes:<,eol:\u00ac,trail:\u00b7"
 " Use clipboard for yanking and pasting from
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-set background=dark
 set t_Co=256
 if has("clipboard")
   set clipboard=unnamed " copy to the system clipboard
 
+let g:gruvbox_contrast_dark = 'hard'
+if exists('+termguicolors')
+    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
+    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
+endif
+let g:gruvbox_invert_selection='0'
 au! VimEnter COMMIT_EDITMSG exec 'norm gg' | startinsert!
 let b:coc_root_patterns = ['.git', '.env']
   if has("unnamedplus")" " X11 support
@@ -49,20 +52,29 @@ let b:coc_root_patterns = ['.git', '.env']
   endif
 endif
 " ================ MAPPINGS =====================
-command Bd :up | %bd | e#
+command! Bd :up | %bd | e#
 nnoremap <Space> <Nop>
-let mapleader = "\<Space>"
-nnoremap <silent> <leader> :call leaderMapper#start() "<Space>"<CR>
-vnoremap <silent> <leader> :call leaderMapper#start() "<Space>"<CR>
+let g:mapleader = "\<Space>"
+let g:maplocalleader = ','
+nnoremap <silent> <leader>      :WhichKey '<Space>'<CR>
+nnoremap <silent> <localleader> :WhichKey  ','<CR>
+vnoremap <silent> <leader>      :WhichKeyVisual '<Space>'<CR>
+vnoremap <localleader> :<c-u>WhichKeyVisual  ','<CR>
 nnoremap <leader>ht :HardTimeToggle<CR>
 nnoremap <leader>dl :r ~/diary/diary/template.md<CR>
 nnoremap <leader>wk :wincmd k<CR>
 nnoremap <leader>wj :wincmd j<CR>
+nnoremap <leader>tp :call CocAction('runCommand', 'jest.projectTest')<CR>
+nnoremap <leader>tc :call CocAction('runCommand', 'jest.fileTest', ['%'])<CR>
+nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 nnoremap <leader>wh :wincmd h<CR>
 nnoremap <leader>wl :wincmd l<CR>
 nnoremap <leader>w- :split<CR>
 nnoremap <leader>w\ :vsplit<CR>
 nnoremap <leader>q :q<CR>
+
+nnoremap <leader>ml :set list!<CR>
+nnoremap <leader>mc :CalendarH<CR>
 " H moves to first nonblank character
 nnoremap H ^
 vnoremap H ^
@@ -84,45 +96,32 @@ nnoremap gdh :diffget //2<CR>
 nnoremap gdl :diffget //3<CR>
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
-" vim fugitive
-let gitGutter = {'name': 'Gutter',
-             \'s': [":GitGutterStageHunk", "Stage Hunk"],
-             \'t': [":GitGutterToggle", "Toggle Gutter"],
-             \}
-let gitMenu = {'name': "Git",
-             \'s': [":Gstatus", "Status"],
-             \'p': [":Git pushd", "Push changes"],
-             \'d': [":Gvdiffsplit!", "Diff Split"],
-             \'c': [":Gcommit", "Commit Changes"],
-             \'g': [gitGutter, "Toggle Gutter"],
-             \}
-let vimMenu = {'name': "Vimrc",
-             \'s': [":so $MYVIMRC", "Source"],
-             \'f': [":tabe $MYVIMRC", "Open"],
-             \}
-let cocNvim = {'name': "Coc.nvim",
-             \'c': [":Commands", "Command"],
-             \'a': [":CocAction", "Action for fix"],
-             \'f': [":CocCommand eslint.executeAutofix", "autofix all"],
-             \'n': [":CocNext", "Next error"],
-             \'d': [":CocList diagnostics", "Diagnostics"],
-             \}
-let vimWiki = {'name': 'Vimwiki',
-             \'w': [":VimwikiIndex",           "Main Index"],
-             \'s': [":VimwikiUISelect",        "Select wiki"],
-             \'i': [":VimwikiDiaryIndex",      "Diary"]
-             \}
-let g:leaderMenu = {"name":  "",
-             \'f': [":Ag", "files by string"],
-             \'s': [":GFiles", "files by name"],
-             \'g': [gitMenu,                        "Git"],
-             \'c': [cocNvim,                        "Coc.nvim"],
-             \'v': [vimMenu,                        "Edit vimrc"],
-             \'r': [":Ranger",                      "Ranger file manager"],
-             \'l': [":Buffer",                      "List opened buffers"],
-             \'/': [":BLines",                       "Search lines in open buffer"],
-             \'w': [vimWiki,                        "Vimwiki"]
-             \}
+" git 
+nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gp :Git pushd<CR>
+nnoremap <leader>gd :Gvdiffsplit!<CR>
+nnoremap <leader>gc :Gcommit<CR>
+" git gutter
+nnoremap <leader>ggs :GitGutterStageHunk<CR>
+nnoremap <leader>ggt :GitGutterToggle<CR>
+
+" vim source files
+nnoremap <leader>vs :so $MYVIMRC<CR>
+nnoremap <leader>vf :tabe $MYVIMRC<CR>
+
+nnoremap <leader>cc :Commands<CR>
+nnoremap <leader>ca :CocAction<CR>
+nnoremap <leader>cf :CocCommand eslint.executeAutofix<CR>
+nnoremap <leader>cn :CocNext<CR>
+nnoremap <leader>cd :CocList diagnostics<CR>
+
+" Misc commands
+nnoremap <leader>f :Ag<CR>
+nnoremap <leader>s :GFiles<CR>
+nnoremap <leader>r :Ranger<CR>
+nnoremap <leader>l :Buffer<CR>
+nnoremap <leader>/ :BLines<CR>
+
 let g:ranger_map_keys = 0
 " nnoremap <expr> <Leader>s (FugitiveHead() != '' ? ':GFiles<cr>' : ':Files<cr>')
 " nnoremap <Leader>gs :Gstatus<CR>
@@ -139,7 +138,7 @@ let g:ranger_map_keys = 0
 
 " Misc
 nnoremap <c-s> :w<CR>
-imap <c-s> <Esc><c-s>a
+inoremap <c-s> <Esc><c-s>a
 nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 let g:vrc_output_buffer_name = '__VRC_OUTPUT.json'
 let g:vrc_trigger = '<CR>'
@@ -158,37 +157,37 @@ nnoremap <Leader>md :MarkdownPreview
 " ================ END ==========================
 
 call plug#begin()
-Plug 'easymotion/vim-easymotion'
 Plug '/usr/local/opt/fzf'
-Plug 'junegunn/fzf.vim'
-Plug 'morhetz/gruvbox'
-Plug 'itchyny/lightline.vim'
-Plug 'tpope/vim-fugitive'
-Plug 'francoiscabrol/ranger.vim'
-Plug 'preservim/nerdcommenter'
 Plug 'airblade/vim-gitgutter'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'damofthemoon/vim-leader-mapper'
-Plug 'vimwiki/vimwiki', {'branch': 'dev'}
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
-Plug 'reedes/vim-thematic'
-Plug 'yorickpeterse/happy_hacking.vim'
-Plug 'mattn/calendar-vim'
-Plug 'tpope/vim-unimpaired'
 Plug 'diepm/vim-rest-console'
-Plug 'pangloss/vim-javascript'
-Plug 'junegunn/goyo.vim'
-Plug 'chuling/vim-equinusocio-material'
+Plug 'easymotion/vim-easymotion'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'gruvbox-community/gruvbox'
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
+Plug 'itchyny/lightline.vim'
+Plug 'junegunn/fzf.vim'
+Plug 'justinmk/vim-sneak'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
+Plug 'liuchengxu/vim-which-key'
+Plug 'liuchengxu/vim-which-key'
+Plug 'mattn/calendar-vim'
+Plug 'mattn/emmet-vim'
 Plug 'nelsyeung/twig.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'pangloss/vim-javascript'
+Plug 'maxmellon/vim-jsx-pretty'
+Plug 'preservim/nerdcommenter'
+Plug 'reedes/vim-thematic'
 Plug 'takac/vim-hardtime'
+Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-unimpaired'
+Plug 'vimwiki/vimwiki', {'branch': 'dev'}
 Plug 'wellle/targets.vim'
-Plug 'justinmk/vim-sneak'
+Plug 'yorickpeterse/happy_hacking.vim'
 call plug#end()
 
-let g:goyo_width = 120
-let g:goyo_linenr = 1
+setlocal conceallevel=2
 let g:hardtime_default_on = 0
 let g:hardtime_maxcount = 2
 let g:hardtime_allow_different_key = 1
@@ -207,10 +206,13 @@ let g:vimwiki_list = [
 let g:vimwiki_ext2syntax = {'.md': 'markdown'}
 let g:vimwiki_markdown_link_ext=1
 
+let g:which_key_space_map = {}
+call which_key#register('<Space>', "g:which_key_space_map")
+let g:which_key_display_names = {'<CR>': '↵', '<TAB>': '⇆'}
 nnoremap <Leader>wb :set bt= <bar> :w! /tmp/temp.html <bar> :exe ':silent !open -a /Applications/Firefox.app /tmp/temp.html'<CR>
 
+
 let g:lightline = {
-  \ 'colorscheme': 'equinusocio_material',
   \ 'active': {
   \  'left': [ [ 'mode', 'paste' ],
   \            [ 'gitbranch', 'readonly', 'filename', 'modified'] ]
@@ -220,10 +222,6 @@ let g:lightline = {
   \ }
   \}
 set termguicolors
-let g:gruvbox_contrast_dark='hard'
-highlight Normal ctermbg=none
-highlight NonText ctermbg=none
-au ColorScheme * hi Normal ctermbg=none guibg=none
-au ColorScheme myspecialcolors hi Normal ctermbg=red guibg=red
 colorscheme gruvbox
+set background=dark
 let g:sneak#label = 1
