@@ -6,6 +6,7 @@ zplug "zsh-users/zsh-syntax-highlighting", defer:2
 zplug "tarruda/zsh-autosuggestions"
 zplug "plugins/git-extras", from:oh-my-zsh
 
+zplug "bobthecow/git-flow-completion", from:oh-my-zsh
 zplug "modules/command-not-found", from:oh-my-zsh
 zplug "modules/syntax-highlighting", from:oh-my-zsh
 zplug "plugins/kubectl", from:oh-my-zsh
@@ -35,10 +36,12 @@ fi
 zplug load
 export PATH="/usr/local/opt/php@7.4/bin:$PATH"
 export PATH="/usr/local/opt/php@7.4/sbin:$PATH"
-export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="/usr/local/opt/ncurses/bin:$PATH"
 export PATH="$HOME/pear/bin:$PATH"
+export PATH="$HOME/Library/Python/3.8/bin:$PATH"
 export PATH="$(npm bin):$PATH"
+export PATH="/usr/local/Cellar:$PATH"
+export PATH="$(go env GOPATH)/bin:$PATH"
 _comp_options=(${_comp_options/NO_warnnestedvar/})
 fpath+=${ZDOTDIR:-~}/.zsh_functions
 typeset -g ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE='20'

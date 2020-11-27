@@ -44,6 +44,9 @@ alias tms='tmuxinator start'
 alias y='yarn'
 alias yc='CD=coverage node ~/scripts/yarnjest.js'
 alias yj='CD=jest node ~/scripts/yarnjest.js'
+alias pom='npx okimdone termdown 25m'
+alias cdown='npx okimdone termdown'
+alias okid='npx okimdone'
 function current_branch() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || return
   echo ${ref#refs/heads/}

@@ -2,9 +2,8 @@ set tabstop=2
 set shiftwidth=2
 set expandtab
 set number
-set nobackup
 set noswapfile
-set nowritebackup
+set backupcopy=yes
 set ignorecase
 set hlsearch
 set smartindent
@@ -27,6 +26,7 @@ set list
 set relativenumber
 set timeoutlen=400
 set cmdheight=1
+set nofixendofline
 set updatetime=300
 set updatetime=300
 set shortmess+=c
@@ -95,6 +95,8 @@ vnoremap <leader>K K
 nnoremap gdh :diffget //2<CR>
 nnoremap gdl :diffget //3<CR>
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
+let g:fzf_layout = { 'window': { 'width': 0.8, 'height': 0.8 } }
+let $FZF_DEFAULT_OPTS='--reverse'
 
 " git 
 nnoremap <leader>gs :Gstatus<CR>
@@ -141,35 +143,31 @@ nnoremap <c-s> :w<CR>
 inoremap <c-s> <Esc><c-s>a
 nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 let g:vrc_output_buffer_name = '__VRC_OUTPUT.json'
-let g:vrc_trigger = '<CR>'
-" let g:vrc_auto_format_response_patterns = {
-"   \ 'json': 'jq'
-"   \}
-" let g:vrc_show_command = 1
-" let g:vrc_debug = 1
 let g:vrc_response_default_content_type = 'application/json'
 " nnoremap <Leader>vs :source ~/.config/nvim/init.vim<CR>
 
 " coc.nvim
-" nnoremap <Leader>cf :CocCommand eslint.executeAutofix<CR>
 nnoremap <Leader>md :MarkdownPreview
 
 " ================ END ==========================
 
 call plug#begin()
-Plug '/usr/local/opt/fzf'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'diepm/vim-rest-console'
 Plug 'easymotion/vim-easymotion'
+Plug 'jxnblk/vim-mdx-js'
+Plug 'wakatime/vim-wakatime'
 Plug 'francoiscabrol/ranger.vim'
 Plug 'gruvbox-community/gruvbox'
 Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
 Plug 'itchyny/lightline.vim'
-Plug 'junegunn/fzf.vim'
 Plug 'justinmk/vim-sneak'
+Plug 'ekalinin/Dockerfile.vim'
 Plug 'leafgarland/typescript-vim'
 Plug 'peitalin/vim-jsx-typescript'
-Plug 'liuchengxu/vim-which-key'
+Plug 'flazz/vim-colorschemes'
 Plug 'liuchengxu/vim-which-key'
 Plug 'mattn/calendar-vim'
 Plug 'mattn/emmet-vim'
@@ -184,7 +182,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-unimpaired'
 Plug 'vimwiki/vimwiki', {'branch': 'dev'}
 Plug 'wellle/targets.vim'
-Plug 'yorickpeterse/happy_hacking.vim'
 call plug#end()
 
 setlocal conceallevel=2
@@ -203,6 +200,17 @@ let g:vimwiki_list = [
   \   'ext': '.md'
   \}
 \] 
+" Use K to show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+let g:vrc_set_default_mapping=1
 let g:vimwiki_ext2syntax = {'.md': 'markdown'}
 let g:vimwiki_markdown_link_ext=1
 
@@ -210,6 +218,7 @@ let g:which_key_space_map = {}
 call which_key#register('<Space>', "g:which_key_space_map")
 let g:which_key_display_names = {'<CR>': '↵', '<TAB>': '⇆'}
 nnoremap <Leader>wb :set bt= <bar> :w! /tmp/temp.html <bar> :exe ':silent !open -a /Applications/Firefox.app /tmp/temp.html'<CR>
+command! -nargs=0 Tsc                                  :call     CocAction('runCommand', 'tsserver.watchBuild')
 
 
 let g:lightline = {
@@ -221,6 +230,7 @@ let g:lightline = {
   \  'gitbranch': 'FugitiveHead'
   \ }
   \}
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
 colorscheme gruvbox
 set background=dark
