@@ -15,3 +15,4 @@ export PATH="(go env GOPATH)/bin:$PATH"
 
 set -U __done_min_cmd_duration 20000
 bind \ce edit_command_buffer
+set --universal tide_left_prompt_items 'nvm' $tide_left_prompt_items
