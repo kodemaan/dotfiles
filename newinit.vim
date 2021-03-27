@@ -3,7 +3,8 @@ set shiftwidth=2
 set expandtab
 set number
 set noswapfile
-set backupcopy=yes
+set nobackup
+set nowritebackup
 set ignorecase
 set hlsearch
 set smartindent
@@ -17,35 +18,19 @@ set smartcase
 set mouse=a
 set colorcolumn=120
 set nocursorline
+set updatetime=300
 set hidden
 set signcolumn=auto
 set wildmenu
 set lazyredraw
 set list
 set relativenumber
-set cmdheight=1
+set cmdheight=2
 set nofixendofline
 set shortmess+=c
 set tags=tags
-let &listchars = "tab:~>,space:·,extends:>,precedes:<,eol:\u00ac,trail:\u00b7"
-" Use clipboard for yanking and pasting from
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-set t_Co=256
-if has("clipboard")
-  set clipboard=unnamed " copy to the system clipboard
+filetype plugin on
 
-if exists('+termguicolors')
-    let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-    let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-endif
-let g:gruvbox_invert_selection='0'
-au! VimEnter COMMIT_EDITMSG exec 'norm gg' | startinsert!
-let b:coc_root_patterns = ['.git', '.env']
-  if has("unnamedplus")" " X11 support
-    set clipboard+=unnamedplus
-  endif
-endif
 " ================ MAPPINGS =====================
 command! Bd :up | %bd | e#
 nnoremap <Space> <Nop>
@@ -59,10 +44,10 @@ nnoremap <leader>ht :HardTimeToggle<CR>
 nnoremap <leader>dl :r ~/diary/diary/template.md<CR>
 nnoremap <leader>wk :wincmd k<CR>
 nnoremap <leader>wj :wincmd j<CR>
-nnoremap <leader>tp :call CocAction('runCommand', 'jest.projectTest')<CR>
-nnoremap <leader>tc :call CocAction('runCommand', 'jest.fileTest', ['%'])<CR>
-nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
-nmap <silent> gd <Plug>(coc-definition)
+
+" nnoremap <leader>tp :call CocAction('runCommand', 'jest.projectTest')<CR>
+" nnoremap <leader>tc :call CocAction('runCommand', 'jest.fileTest', ['%'])<CR>
+" nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 nmap <silent> gy <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
@@ -111,9 +96,9 @@ nnoremap <leader>ggt :GitGutterToggle<CR>
 " vim source files
 nnoremap <leader>vs :so $MYVIMRC<CR>
 nnoremap <leader>vf :tabe $MYVIMRC<CR>
+nnoremap <leader>vo :tabe ~/code/dotfiles/newvimrc<CR>
 
 nnoremap <leader>cc :Commands<CR>
-nnoremap <leader>ca :CocAction<CR>
 nnoremap <leader>cf :CocCommand eslint.executeAutofix<CR>
 nnoremap <leader>cn :CocNext<CR>
 nnoremap <leader>cd :CocList diagnostics<CR>
@@ -147,63 +132,6 @@ nnoremap <Leader>tt :VimwikiToggleListItem<CR>
 
 " coc.nvim
 nnoremap <Leader>md :MarkdownPreview
-
-" ================ END ==========================
-
-call plug#begin()
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'airblade/vim-gitgutter'
-Plug 'easymotion/vim-easymotion'
-Plug 'jxnblk/vim-mdx-js'
-Plug 'wakatime/vim-wakatime'
-Plug 'francoiscabrol/ranger.vim'
-Plug 'gruvbox-community/gruvbox'
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app & yarn install' }
-Plug 'baverman/vial'
-Plug 'baverman/vial-http'
-Plug 'itchyny/lightline.vim'
-Plug 'justinmk/vim-sneak'
-Plug 'ekalinin/Dockerfile.vim'
-Plug 'leafgarland/typescript-vim'
-Plug 'peitalin/vim-jsx-typescript'
-Plug 'flazz/vim-colorschemes'
-Plug 'liuchengxu/vim-which-key'
-Plug 'mattn/calendar-vim'
-Plug 'mattn/emmet-vim'
-Plug 'nelsyeung/twig.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'pangloss/vim-javascript'
-Plug 'kristijanhusak/vim-hybrid-material'
-Plug 'maxmellon/vim-jsx-pretty'
-Plug 'preservim/nerdcommenter'
-Plug 'reedes/vim-thematic'
-Plug 'takac/vim-hardtime'
-Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-unimpaired'
-Plug 'vimwiki/vimwiki', {'branch': 'dev'}
-Plug 'wellle/targets.vim'
-call plug#end()
-
-setlocal conceallevel=2
-let g:hardtime_default_on = 0
-let g:hardtime_maxcount = 2
-let g:hardtime_allow_different_key = 1
-let g:vimwiki_list = [
-  \{
-  \  'path': '~/diary',
-  \  'syntax': 'markdown',
-  \  'ext': '.md'
-  \},
-  \{
-  \   'path': '~/mynotes/',
-  \   'syntax': 'markdown',
-  \   'ext': '.md'
-  \}
-\] 
-" Use K to show documentation in preview window
-nnoremap <silent> K :call <SID>show_documentation()<CR>
-
 function! s:show_documentation()
   if (index(['vim','help'], &filetype) >= 0)
     execute 'h '.expand('<cword>')
@@ -211,34 +139,46 @@ function! s:show_documentation()
     call CocAction('doHover')
   endif
 endfunction
-let g:vimwiki_ext2syntax = {'.md': 'markdown'}
-let g:vimwiki_markdown_link_ext=1
 
-let g:which_key_space_map = {}
-call which_key#register('<Space>', "g:which_key_space_map")
-let g:which_key_display_names = {'<CR>': '↵', '<TAB>': '⇆'}
-nnoremap <Leader>wb :set bt= <bar> :w! /tmp/temp.html <bar> :exe ':silent !open -a /Applications/Firefox.app /tmp/temp.html'<CR>
-command! -nargs=0 Tsc :call CocAction('runCommand', 'tsserver.watchBuild')
+" Ale Configs
+let g:ale_completion_enabled = 1
+let b:ale_fixers = ['prettier', 'eslint']
+let g:ale_fix_on_save = 1
+let g:ale_completion_autoimport = 1
+nnoremap <leader>ca :ALECodeAction<CR>
+nnoremap K :ALEHover<CR>
+nnoremap an :ALENext<CR>
+nnoremap ap :ALEPrevious<CR>
+nnoremap ad :ALEGoToDefinition<CR>
+nnoremap af :ALEFix<CR>
+let g:ale_sign_error = "🐛"
+let g:ale_sign_warning =  " ⚠️"
+let g:ale_sign_info = "ℹ"
+let g:ale_virtualtext_cursor = 1
+let g:ale_virtualtext_prefix = "🔥 "
+nmap <silent> gd :ALEGoToDefinition<CR>
+let g:deoplete#enable_at_startup = 1
+let g:deoplete#complete_method = "omnifunc"
 
 
-let g:lightline = {
-  \ 'active': {
-  \  'left': [ [ 'mode', 'paste' ],
-  \            [ 'gitbranch', 'readonly', 'filename', 'modified'] ]
-  \ },
-  \ 'component_function': {
-  \  'gitbranch': 'FugitiveHead'
-  \ }
-  \}
-if (has("nvim"))
-  "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-  let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-endif
-if (has("termguicolors"))
-  set termguicolors
-endif
-set background=dark
-colorscheme hybrid_reverse
-"let g:gruvbox_contrast_dark='hard'
-"let g:gruvbox_colors = { 'bg0': ['#111111', 0] }
-let g:sneak#label = 1
+" ================ END ==========================
+call plug#begin()
+Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+Plug 'Shougo/neosnippet.vim'
+Plug 'Shougo/neosnippet-snippets'
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'gruvbox-community/gruvbox'
+Plug 'francoiscabrol/ranger.vim'
+Plug 'wakatime/vim-wakatime'
+Plug 'justinmk/vim-sneak'
+Plug 'tpope/vim-fugitive'
+Plug 'itchyny/lightline.vim'
+Plug 'tpope/vim-unimpaired'
+Plug 'dense-analysis/ale'
+Plug 'takac/vim-hardtime'
+call plug#end()
+
+
+colorscheme gruvbox

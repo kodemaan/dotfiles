@@ -11,8 +11,9 @@ export PATH="$HOME/Library/Python/3.8/bin:$PATH"
 export PATH="(npm bin):$PATH"
 export PATH="/usr/local/Cellar:$PATH"
 export PATH="(go env GOPATH)/bin:$PATH"
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
 # END Path Config
 
 set -U __done_min_cmd_duration 20000
 bind \ce edit_command_buffer
-set --universal tide_left_prompt_items 'nvm' $tide_left_prompt_items
+starship init fish | source

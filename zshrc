@@ -63,3 +63,4 @@ bindkey '^e' edit-command-line
 eval "$(starship init zsh)"
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+export PATH="/usr/local/opt/openssl@1.1/bin:$PATH"
